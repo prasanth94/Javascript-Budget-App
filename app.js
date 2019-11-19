@@ -97,6 +97,19 @@ return {
 
   },
 
+  clearFields: function(){
+    var fields, fieldsArr;
+
+    fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+    fieldsArr = Array.prototype.slice.call(fields);
+
+    fieldsArr.forEach(function(current, index, array){
+      current.value ="";
+    })
+
+    fieldsArr[0].focus();
+  },
+
   getDOMstrings: function() {
     return DOMstrings;
   }
@@ -124,8 +137,12 @@ var setupEventListeners = function () {
     // Add the Item to budget
     newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
+
     //Add Item to UI
     uiCtrl.addListItem(newItem, input.type);
+
+    //clear the fields
+    uiCtrl.clearFields();
   };
 
 return {
