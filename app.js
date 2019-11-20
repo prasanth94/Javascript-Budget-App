@@ -16,10 +16,12 @@ var budgetController = (function(){
   var calculateTotal = function(type){
     var sum = 0;
     data.allItems[type].forEach(function(cur){
-      sum += cur.value;
-    })
+      sum = sum + parseInt(cur.value);
+      console.log("cur:"+cur.value);
+      console.log("sum:"+ sum)
+    });
     data.totals[type] = sum;
-  }
+  };
 
   var data = {
     allItems: {
@@ -97,7 +99,11 @@ var uiController = (function(){
     inputValue: '.add__value',
     inputBtn: '.add__btn',
     incomeContainer: '.income__list',
-    expenseContainer: '.expenses__list'
+    expenseContainer: '.expenses__list',
+    budgetLabel: '.budget__value',
+    incomeLabel: '.budget__income--value',
+    expenseLabel: '.budget__expenses--value',
+    percentageLabel: '.budget__expenses--percentage'
   };
 
 return {
@@ -145,6 +151,18 @@ return {
     fieldsArr[0].focus();
   },
 
+  displayBudget: function(obj) {
+    document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget;
+    document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc;
+    document.querySelector(DOMstrings.expenseLabel).textContent = obj.totalExp;
+
+    if (obj.percentage > 0) {
+      document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage + "%";
+    }else{
+      document.querySelector(DOMstrings.percentageLabel).textContent = "---";
+    }
+  },
+
   getDOMstrings: function() {
     return DOMstrings;
   }
@@ -168,6 +186,7 @@ var setupEventListeners = function () {
     budgetCtrl.calculateBudget();
     var budget = budgetCtrl.getBudget();
     console.log(budget);
+    uiCtrl.displayBudget(budget);
   };
 
   var ctrlAddItem = function() {
@@ -193,6 +212,12 @@ var setupEventListeners = function () {
 return {
   init: function() {
     setupEventListeners();
+    uiCtrl.displayBudget({
+      budget: 0,
+      totalInc: 0,
+      totalExp: 0,
+      perecentage: 0
+    });
   }
 };
 
